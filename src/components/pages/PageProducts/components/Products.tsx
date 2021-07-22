@@ -1,17 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import {Product} from "models/Product";
-import {formatAsPrice} from "utils/utils";
+import { makeStyles } from '@material-ui/core/styles';
+import { Product } from "models/Product";
+import { formatAsPrice } from "utils/utils";
 import AddProductToCart from "components/AddProductToCart/AddProductToCart";
-// import axios from 'axios';
-// import API_PATHS from "constants/apiPaths";
-import productList from "./productList.json";
+import axios from 'axios';
+import API_PATHS from 'constants/apiPaths';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,9 +35,17 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // axios.get(`${API_PATHS.bff}/product/available/`)
-    //   .then(res => setProducts(res.data));
-    setProducts(productList);
+    console.log(`${API_PATHS.bff}/products`);
+    
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_PATHS.bff}/products`);
+        setProducts(res.data)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
   }, [])
 
   return (
@@ -60,7 +67,7 @@ export default function Products() {
               </Typography>
             </CardContent>
             <CardActions>
-              <AddProductToCart product={product}/>
+              <AddProductToCart product={product} />
             </CardActions>
           </Card>
         </Grid>
