@@ -54,8 +54,9 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
       console.log('Result: ', result)
       setFile('');
     }
-    catch (error: any) {
+    catch (error) {
       console.log(`error`, error)
+      // @ts-ignore
       switch (error.status) {
         case 403:
           alert("Forbidden to upload")
