@@ -37,13 +37,15 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
     try {
       const response = await axios({
         method: 'GET',
-        headers: {
-          Authorization: basicAuthorization || {},
-        },
         url,
         params: {
           name: encodeURIComponent(file.name)
-        }
+        },
+        headers: token
+          ? {
+            Authorization: basicAuthorization
+          }
+          : {}
       })
       console.log('File to upload: ', file.name)
       console.log('Uploading to: ', response.data)
@@ -55,7 +57,8 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
       setFile('');
     }
     catch (error) {
-      console.log(`error`, error)
+      console.log(error)
+      console.log(error.status)
       // @ts-ignore
       switch (error.status) {
         case 403:
